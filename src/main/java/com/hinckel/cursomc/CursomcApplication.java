@@ -13,6 +13,7 @@ import com.hinckel.cursomc.domain.Cidade;
 import com.hinckel.cursomc.domain.Cliente;
 import com.hinckel.cursomc.domain.Endereco;
 import com.hinckel.cursomc.domain.Estado;
+import com.hinckel.cursomc.domain.ItemPedido;
 import com.hinckel.cursomc.domain.Pagamento;
 import com.hinckel.cursomc.domain.PagamentoComBoleto;
 import com.hinckel.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.hinckel.cursomc.repositories.CidadeRepository;
 import com.hinckel.cursomc.repositories.ClienteRepository;
 import com.hinckel.cursomc.repositories.EnderecoRepository;
 import com.hinckel.cursomc.repositories.EstadoRepository;
+import com.hinckel.cursomc.repositories.ItemPedidoRepository;
 import com.hinckel.cursomc.repositories.PagamentoRepository;
 import com.hinckel.cursomc.repositories.PedidoRepository;
 import com.hinckel.cursomc.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -119,5 +124,19 @@ public class CursomcApplication implements CommandLineRunner {
 
 		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
 		pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
+		
+		
+		ItemPedido ip1 = new ItemPedido(pedido1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(pedido1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(pedido2, p2, 100.00, 1, 800.00);
+		
+		pedido1.getItens().addAll(Arrays.asList(ip1, ip2));
+		pedido2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 }

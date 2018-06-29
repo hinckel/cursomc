@@ -21,4 +21,8 @@ public class CategoriaService {
 				"Object not found! Id: " + id + ", Type:  " + Categoria.class.getSimpleName()));
 	}
 
+	public Categoria insert(Categoria entity) {
+		entity.setId(null);
+		return repo.save(entity);
+	}
 }

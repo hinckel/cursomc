@@ -3,6 +3,7 @@ package com.hinckel.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.hinckel.cursomc.domain.Categoria;
@@ -25,9 +26,19 @@ public class CategoriaService {
 		entity.setId(null);
 		return repo.save(entity);
 	}
-	
+
 	public Categoria update(Categoria entity) {
 		find(entity.getId());
 		return repo.save(entity);
+	}
+
+	public void delete(Integer id) {
+		find(id);
+		try {
+			repo.deleteById(id);
+		} catch (DataIntegrityViolationException dive) {
+			throw new com.hinckel.cursomc.services.exception.DataIntegrityViolationException(
+					"Não é possível excluir uma categoria que possui produtos!");
+		}
 	}
 }
